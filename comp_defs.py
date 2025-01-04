@@ -26,8 +26,10 @@ class Component:
         return [field for field, value in self.get_all_fields().items() if value is None]
 
     def get_inheritance(self, raw=False):
+        '''Returns the inheritance chain list  of the component in form of 
+        string names. Set 'raw' to True to return class references instead.'''
         if raw:
-            return self.__class__.__mro__
+            return list(self.__class__.__mro__)
         else:
             return [cls.__name__ for cls in self.__class__.__mro__]
         
