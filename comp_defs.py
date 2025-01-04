@@ -25,6 +25,12 @@ class Component:
         '''Return a list of all fields that are None.'''
         return [field for field, value in self.get_all_fields().items() if value is None]
 
+    def get_inheritance(self, raw=False):
+        if raw:
+            return self.__class__.__mro__
+        else:
+            return [cls.__name__ for cls in self.__class__.__mro__]
+        
 class Passive(Component):
     def __init__(self):
         super().__init__()
@@ -47,18 +53,18 @@ class Inductor(Passive):
         self.geometry = None
         self.current = None
 
-class IC(Component):
+class IntegratedCircuit(Component):
     def __init__(self):
         super().__init__()
         self.number = None
         pass #tbd
 
-class Analog(IC):
+class Analog(IntegratedCircuit):
     def __init__(self):
         super().__init__()
         pass #tbd
 
-class Digital(IC):
+class Digital(IntegratedCircuit):
     def __init__(self):
         super().__init__()
         self.family = None
@@ -69,7 +75,7 @@ class Logic(Digital):
         super().__init__()
         pass #tbd
 
-class Regulator(IC):
+class Regulator(IntegratedCircuit):
     def __init__(self):
         super().__init__()
         self.voltage = None
@@ -84,3 +90,5 @@ test.set_field('value', 123)
 test.set_field('power', 0.25)
 print(test.get_all_fields())
 print(test.get_empty_fields())
+print(test.get_inheritance())
+print(test.get_inheritance(raw=True))
