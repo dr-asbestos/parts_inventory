@@ -54,6 +54,7 @@ class Component:
         for slots in (getattr(cls, '__slots__', ()) for cls in self.__class__.__mro__):
             for slot in slots:
                 setattr(self, slot, None)
+    
     def __repr__(self):
         return f"{self.__class__.__name__}: {self.get_fields_dict()}"
     

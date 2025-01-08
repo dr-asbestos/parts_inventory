@@ -31,21 +31,29 @@ class Manager:
             self.db.sort(key=lambda x: x.id)
 
     def add_new_component(self):
+        '''TODO: refactor me. 
+        Prompts the user for name and field values for a new component 
+        and adds it to the database. '''
         new_comp = None
         while new_comp is None:
             new_comp = get_component(input('Component name: '))
-        new_comp = new_comp()
+        new_comp = new_comp() 
         for field in new_comp.get_all_fields():
             new_comp.set_fields({field: input(f"Enter {field}: ")})
         self.db.append(new_comp)
-        print(f"Added: {new_comp.__class__.__name__}: {new_comp.get_fields_dict()}")
+        print(f"Added: {repr(new_comp)}")
         
 
 def main():
-    #test_mngr = Manager(db_path=test_path)
-    #test_mngr.load_db()
+    test_mngr = Manager(db_path=test_path)
+    test_mngr.load_db()
     #print(test_mngr.db)
-    #quit()
+    print(*test_mngr.db, sep='\n')
+    test_mngr.db[1].id = 777
+    print(*test_mngr.db, sep='\n')
+
+    quit()
+
 
     mngr = Manager(db_path=test_path)
     while input('do stuff?') == 'y':
@@ -56,7 +64,7 @@ def main():
     new_mngr = Manager(db_path=test_path)
     new_mngr.load_db()
 
-    print(new_mngr.db)
+    print(*(repr(comp) for comp in new_mngr.db), sep='\n')
 
 
 
