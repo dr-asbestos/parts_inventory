@@ -54,7 +54,9 @@ class Component:
         for slots in (getattr(cls, '__slots__', ()) for cls in self.__class__.__mro__):
             for slot in slots:
                 setattr(self, slot, None)
-
+    def __repr__(self):
+        return f"{self.__class__.__name__}: {self.get_fields_dict()}"
+    
     def set_fields(self, fields):
         '''Takes a dictionary of fields and values, and sets this component's 
         fields and values. Raises AttribureError in case of failure.'''
