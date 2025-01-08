@@ -5,11 +5,12 @@ path = 'inventory.bin'
 test_path = 'inventory_test.bin'
 
 class Manager:
-    def __init__(self, path=None, db=None):
-        self.db_path = path
-        self.db = db
+    def __init__(self, db_path=None, db=None):
+        self.db_path = db_path
+        self.db = [] if db is None else db
 
     def load_db(self):
+        '''Loads the pickled database from filepath.'''
         try:
             with open(self.db_path, mode='rb') as file:
                 self.db = pickle.load(file)
@@ -17,6 +18,7 @@ class Manager:
             print(e)
 
     def save_db(self):
+        '''Pickles the database to filepath.'''
         try:
             with open(self.db_path, mode='wb') as file:
                 pickle.dump(self.db, file)
@@ -24,17 +26,50 @@ class Manager:
             print(e)
     
     def sort_db(self):
+        '''Sorts the loaded database in-situ by component ID.'''
         if isinstance(self.db, list):
             self.db.sort(key=lambda x: x.id)
 
+    def add_new_component(self):
+        new_comp = None
+        while new_comp is None:
+            new_comp = get_component(input('Component name: '))
+        new_comp = new_comp()
+        for field in new_comp.get_all_fields():
+            new_comp.set_fields({field: input(f"Enter {field}: ")})
+        self.db.append(new_comp)
+        print(f"Added: {new_comp.__class__.__name__}: {new_comp.get_fields_dict()}")
+        
 
 def main():
+    #test_mngr = Manager(db_path=test_path)
+    #test_mngr.load_db()
+    #print(test_mngr.db)
+    #quit()
+
+    mngr = Manager(db_path=test_path)
+    while input('do stuff?') == 'y':
+        mngr.add_new_component()
+
+    mngr.save_db()
+
+    new_mngr = Manager(db_path=test_path)
+    new_mngr.load_db()
+
+    print(new_mngr.db)
+
+
+
+
+
+    '''
     test = get_component('opamp')() 
     print(test.get_all_fields())
     print(test.get_empty_fields())
     print(test.get_inheritance())
     test.id = 1234
     print(test.get_fields_dict())
+    '''
 
 
 

@@ -97,7 +97,7 @@ class Resistor(Passive):
 class Capacitor(Passive):
     __slots__ = ('voltage',)
     def __init__(self):
-        super().__init()
+        super().__init__()
 
 class Inductor(Passive):
     __slots__ = ('current', 'geometry')
