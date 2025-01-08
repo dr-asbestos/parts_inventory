@@ -50,7 +50,7 @@ class Component:
     # the order of 'importance' of the fields is increasing
     __slots__ = ('description', 'mounting', 'package', 'qty', 'id')
     def __init__(self):
-        '''Dynamically create all class attributes/fields from __slots__.'''
+        '''Dynamically create all class fields from __slots__.'''
         for slots in (getattr(cls, '__slots__', ()) for cls in self.__class__.__mro__):
             for slot in slots:
                 setattr(self, slot, None)
@@ -68,6 +68,10 @@ class Component:
             slots += getattr(cls, '__slots__', [])
         return slots[::-1]
     
+    def get_fields_dict(self):
+        '''Returns a dictionary of all fields and assigned values.'''
+        return {field: getattr(self, field, None) for field in self.get_all_fields()}
+
     def get_empty_fields(self):
         '''Return a list of all fields that are None.'''
         return [field for field in self.get_all_fields() if getattr(self, field, None) is None]

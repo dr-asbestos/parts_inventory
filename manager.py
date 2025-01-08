@@ -2,9 +2,10 @@ from comp_defs import *
 import pickle
 
 path = 'inventory.bin'
+test_path = 'inventory_test.bin'
 
 class Manager:
-    def __init__(self, path, db=None):
+    def __init__(self, path=None, db=None):
         self.db_path = path
         self.db = db
 
@@ -21,13 +22,19 @@ class Manager:
                 pickle.dump(self.db, file)
         except Exception as e:
             print(e)
+    
+    def sort_db(self):
+        if isinstance(self.db, list):
+            self.db.sort(key=lambda x: x.id)
 
 
 def main():
-    test = get_component('bjt')() 
+    test = get_component('opamp')() 
     print(test.get_all_fields())
     print(test.get_empty_fields())
     print(test.get_inheritance())
+    test.id = 1234
+    print(test.get_fields_dict())
 
 
 
