@@ -1,9 +1,6 @@
 from comp_defs import *
 import pickle
 
-path = 'inventory.bin'
-test_path = 'inventory_test.bin'
-
 class Manager:
     def __init__(self, db_path=None, db=None):
         self.db_path = db_path
