@@ -31,7 +31,7 @@ class Manager:
             self.db.sort(key=lambda x: x.id)
 
     def add_new_component(self):
-        '''TODO: refactor me. 
+        '''TODO: refactor me to work with cli layer. 
         Prompts the user for name and field values for a new component 
         and adds it to the database. '''
         new_comp = None
@@ -43,43 +43,3 @@ class Manager:
         self.db.append(new_comp)
         print(f"Added: {repr(new_comp)}")
         
-
-def main():
-    test_mngr = Manager(db_path=test_path)
-    test_mngr.load_db()
-    #print(test_mngr.db)
-    print(*test_mngr.db, sep='\n')
-    test_mngr.db[1].id = 777
-    print(*test_mngr.db, sep='\n')
-
-    quit()
-
-
-    mngr = Manager(db_path=test_path)
-    while input('do stuff?') == 'y':
-        mngr.add_new_component()
-
-    mngr.save_db()
-
-    new_mngr = Manager(db_path=test_path)
-    new_mngr.load_db()
-
-    print(*(repr(comp) for comp in new_mngr.db), sep='\n')
-
-
-
-
-
-    '''
-    test = get_component('opamp')() 
-    print(test.get_all_fields())
-    print(test.get_empty_fields())
-    print(test.get_inheritance())
-    test.id = 1234
-    print(test.get_fields_dict())
-    '''
-
-
-
-if __name__ == '__main__':
-    main()

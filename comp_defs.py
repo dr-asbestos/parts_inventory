@@ -169,25 +169,3 @@ class JFET(Transistor):
         super().__init__()
 
 #todo:add other components: igbt, switch, 
-'''
-if __name__ == '__main__':
-    # testing bits on the go
-    test = Resistor()
-    test.set_fields({'value': 123, 'power': 0.25})
-    test.id = 999
-
-    print(test.get_all_fields())
-    print(test.get_empty_fields())
-    print(test.get_inheritance())
-    print(test.get_inheritance(raw=True))
-
-    try:
-        test.set_fields({'haha': 777})
-    except Exception as e:
-        print(e)
-
-    try:
-        test.haha = 777
-    except Exception as e:
-        print(e)
-'''
