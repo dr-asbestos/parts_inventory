@@ -39,4 +39,14 @@ class Manager:
             new_comp.set_fields({field: input(f"Enter {field}: ")})
         self.db.append(new_comp)
         print(f"Added: {repr(new_comp)}")
+
+    def get_next_id(self):
+        self.sort_db()
+        id_list = [comp.id for comp in self.db]
+        next_id = len(id_list)
+        for i, id in enumerate(id_list):
+            if i != id:
+                next_id = i
+                break
+        return next_id
         

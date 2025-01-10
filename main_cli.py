@@ -23,6 +23,15 @@ class ManagerCLI(Cmd):
         '''Prints whole database. For debugging purposes.'''
         print(*(repr(comp) for comp in self.mngr.db), sep='\n')
 
+    def do_shell(self, line):
+        '''Execute arbitrary Python code and prints return value. Command '!' 
+        is synonym for 'shell'. For debugging purposes only. Don't do 
+        anything naughty. pls. '''
+        try:
+            print(exec(line))
+        except Exception as e:
+            print(e)
+    
     def emptyline(self):
         pass
 
