@@ -41,6 +41,8 @@ class Manager:
         print(f"Added: {repr(new_comp)}")
 
     def get_next_id(self):
+        '''Returns next available component ID in the database. Calls 
+        `sort_db()' before execution.'''
         self.sort_db()
         id_list = [comp.id for comp in self.db]
         next_id = len(id_list)

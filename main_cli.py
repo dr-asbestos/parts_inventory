@@ -19,6 +19,11 @@ class ManagerCLI(Cmd):
         self.mngr.load_db()
         print(f"Loaded database file: {self.mngr.db_path}")
     
+    def do_save(self, _):
+        '''Saves the database to file.'''
+        self.mngr.save_db()
+        print(f"Saved database file: {self.mngr.db_path}")
+    
     def do_printdb(self, _):
         '''Prints whole database. For debugging purposes.'''
         print(*(repr(comp) for comp in self.mngr.db), sep='\n')
