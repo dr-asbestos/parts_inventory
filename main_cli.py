@@ -38,13 +38,16 @@ class ManagerCLI(Cmd):
             print(e)
     
     def emptyline(self):
+        '''Class method override.'''
         pass
 
     def default(self, line):
+        '''Class method override.'''
         print(f'Unknown command: {line}')
         pass
     
     def postloop(self):
+        '''Class method override.'''
         print('Goodbye!')
     
     def do_EOF(self, _):
