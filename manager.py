@@ -26,21 +26,14 @@ class Manager:
         '''Sorts the loaded database in-situ by component ID.'''
         if isinstance(self.db, list):
             self.db.sort(key=lambda x: x.id)
-
-    def add_new_component_old(self):
-        '''TODO: refactor me to work with cli layer. 
-        Prompts the user for name and field values for a new component 
-        and adds it to the database. '''
-        new_comp = None
-        while new_comp is None:
-            new_comp = get_component(input('Component name: '))
-        new_comp = new_comp() 
-        for field in new_comp.get_all_fields():
-            new_comp.set_fields({field: input(f"Enter {field}: ")})
-        self.db.append(new_comp)
-        print(f"Added: {repr(new_comp)}")
-
+    
     def add_new_component(self):
+        ''' Prompts the user for name and field values for a new component. 
+        The user is then presented with new component fields and confirms the 
+        adition to the database. In case of positive confirmation, the new 
+        component is added and `sort_db' is called. The `id' field is set 
+        automatically. The `qty' field must be a positive integer. Other 
+        fields are cast to float if possible. '''
         while (new_comp := get_component(input('Enter component name: '))) is None:
             pass
         new_comp = new_comp()
