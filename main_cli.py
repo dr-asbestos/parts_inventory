@@ -27,6 +27,9 @@ class ManagerCLI(Cmd):
     def do_printdb(self, _):
         '''Prints whole database. For debugging purposes.'''
         print(*(repr(comp) for comp in self.mngr.db), sep='\n')
+    
+    def do_add(self, _):
+        self.mngr.add_new_component()
 
     def do_shell(self, line):
         '''Execute arbitrary Python code and prints return value. Command '!' 
