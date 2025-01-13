@@ -26,7 +26,7 @@ class Manager:
         '''Sorts the loaded database in-situ by component ID.'''
         if isinstance(self.db, list):
             self.db.sort(key=lambda x: x.id)
-    
+
     def add_new_component(self):
         ''' Prompts the user for name and field values for a new component. 
         The user is then presented with new component fields and confirms the 
@@ -61,7 +61,15 @@ class Manager:
             print('Added new component.')
         else:
             print('Opertion aborted.')
-
+    
+    def get_comp_index_by_id(self, comp_id):
+        '''Returns component's index within the database by given component 
+        id. Returns -1 if component is not found.'''
+        for index, comp in enumerate(self.db):
+            if comp.id == comp_id:
+                return index
+        return -1
+    
     def get_next_id(self):
         '''Returns next available component ID in the database. Calls 
         `sort_db()' before execution.'''
