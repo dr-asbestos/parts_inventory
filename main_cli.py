@@ -6,9 +6,10 @@ class ManagerCLI(Cmd):
     prompt = 'Mngr>> '
     intro = 'Electronic Parts Inventory Manager v1.0.0\nType "help" for available commands'
     
-    def __init__(self, mngr):
+    def __init__(self, mngr, spacing=' '):
         super().__init__()
         self.mngr = mngr
+        self.spacing = spacing
     
     def do_hi(self, line):
         '''Just a test command.'''
@@ -44,7 +45,17 @@ class ManagerCLI(Cmd):
             print(exec(line))
         except Exception as e:
             print(e)
-    
+    def do_line_spacer(self, line):
+        ''''''
+        if len(line) == 0:
+            self.spacing = None
+        elif len(line) == 1:
+            self.spacing = line
+        elif line == 'blank':
+            self.spacing = ' '
+        else:
+            print(f"Invalid line spacer: {line}")
+
     def emptyline(self):
         '''Class method override. Called when an empty line is entered in 
         response to the prompt.'''
@@ -56,10 +67,17 @@ class ManagerCLI(Cmd):
         print(f'Unknown command: {line}')
         pass
     
+    def postcmd(self, stop, line):
+        '''Class method override. Called right after a command dispatch is 
+        finished. '''
+        if self.spacing is not None:
+            print(self.spacing * 40)
+        return stop
+
     def postloop(self):
         '''Class method override. Called when the application is terminating.'''
         print('Goodbye!')
-        
+
     def do_EOF(self, _):
         '''Quits Manager if EOF is encountered.'''
         return True
