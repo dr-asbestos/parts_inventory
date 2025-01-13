@@ -10,6 +10,7 @@ class ManagerCLI(Cmd):
         super().__init__()
         self.mngr = mngr
         self.spacing = spacing
+        self.saved = True
     
     def do_hi(self, line):
         '''Just a test command.'''
@@ -17,12 +18,19 @@ class ManagerCLI(Cmd):
 
     def do_load(self, _):
         '''Loads database from file.'''
+        if not self.saved:
+            while (reply := input(f"Save the database before quitting? (y/n): ")) not in 'yn':
+                pass
+            if reply == 'y':
+                self.do_save(None)
         self.mngr.load_db()
+        self.saved = True
         print(f"Loaded database file: {self.mngr.db_path}")
     
     def do_save(self, _):
         '''Saves the database to file.'''
         self.mngr.save_db()
+        self.saved = True
         print(f"Saved database file: {self.mngr.db_path}")
     
     def do_printdb(self, _):
@@ -32,10 +40,12 @@ class ManagerCLI(Cmd):
     def do_add(self, _):
         '''Launches a dialogue to add a new component to the database.'''
         self.mngr.add_new_component()
+        self.saved = False
     
     def do_edit(self, _):
         '''Launches a dialogue to edit an existing component.'''
         self.mngr.edit_component()
+        self.saved = False
 
     def do_shell(self, line):
         '''Execute arbitrary Python code and prints return value. Command '!' 
@@ -72,7 +82,20 @@ class ManagerCLI(Cmd):
         finished. '''
         if self.spacing is not None:
             print(self.spacing * 40)
-        return stop
+
+        if stop:
+            while (reply := input(f"Are you sure you want to quit? (y/n): ")) not in 'yn':
+                pass
+            if reply == 'y':
+                if not self.saved:
+                    while (reply := input(f"Save the database before quitting? (y/n): ")) not in 'yn':
+                        pass
+                    if reply == 'y':
+                        self.do_save(None)
+                return True
+            else:
+                return False
+        return False
 
     def postloop(self):
         '''Class method override. Called when the application is terminating.'''
