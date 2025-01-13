@@ -18,8 +18,8 @@ class ManagerCLI(Cmd):
 
     def do_load(self, _):
         '''Loads database from file.'''
-        if not self.saved:
-            while (reply := input(f"Save the database before quitting? (y/n): ")) not in 'yn':
+        if not self.saved: # prompt user before they discard all the changes
+            while (reply := input(f"Save the database before loading another? (y/n): ")) not in 'yn':
                 pass
             if reply == 'y':
                 self.do_save(None)
@@ -55,8 +55,11 @@ class ManagerCLI(Cmd):
             print(exec(line))
         except Exception as e:
             print(e)
+    
     def do_line_spacer(self, line):
-        ''''''
+        '''Change line spacing settings. Leave entry blank for no spacing. 
+        Enter `blank' for blank like spacing. Enter single character to make 
+        that character a ruler. '''
         if len(line) == 0:
             self.spacing = None
         elif len(line) == 1:
@@ -83,7 +86,9 @@ class ManagerCLI(Cmd):
         if self.spacing is not None:
             print(self.spacing * 40)
 
-        if stop:
+        # prompt user if they actually want to quit and if they want to 
+        # discard all the changes to the database
+        if stop: 
             while (reply := input(f"Are you sure you want to quit? (y/n): ")) not in 'yn':
                 pass
             if reply == 'y':
