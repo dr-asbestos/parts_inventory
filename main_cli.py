@@ -30,6 +30,9 @@ class ManagerCLI(Cmd):
     
     def do_add(self, _):
         self.mngr.add_new_component()
+    
+    def do_edit(self, _):
+        self.mngr.edit_component()
 
     def do_shell(self, line):
         '''Execute arbitrary Python code and prints return value. Command '!' 
