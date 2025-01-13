@@ -71,18 +71,18 @@ class ManagerCLI(Cmd):
 
     def emptyline(self):
         '''Class method override. Called when an empty line is entered in 
-        response to the prompt.'''
+        response to the prompt. Currently just passes.'''
         pass
 
     def default(self, line):
         '''Class method override. Called when the command prefix is not 
-        recognized.'''
+        recognized. Currently just informs the user.'''
         print(f'Unknown command: {line}')
         pass
     
     def postcmd(self, stop, line):
         '''Class method override. Called right after a command dispatch is 
-        finished. '''
+        finished. Currently prints spacing line and prompts user on exit. '''
         if self.spacing is not None:
             print(self.spacing * 40)
 
