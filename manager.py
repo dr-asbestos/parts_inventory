@@ -69,7 +69,45 @@ class Manager:
             if comp.id == comp_id:
                 return index
         return -1
-    
+
+    def edit_component(self, sudo=False):
+        
+        # get a valid component ID, ie one that exists, ie positive integer 
+        # and present in the database
+        index = -1
+        while True:
+            try:
+                entry = input("Enter component ID: ")
+                index = self.get_comp_index_by_id(int(entry))
+                if index == -1:
+                    raise
+                break
+            except:
+                print(f"Invalid ID or component not found: {entry}")
+        
+        
+        print(f"Currently editing:\n{self.db[index]}\nID editable: {sudo}")
+        while (field := input('Enter field name to edit, leave entry blank to finish editing: ')) != '':
+            if field not in self.db[index].get_all_field:
+                print(f"Invalid field: {field}")
+            else:
+                if field == 'id' and not sudo:
+                    print("Cannot edit ID.")
+                    continue
+                val = input("Enter value for {field}: ")
+                if field == 'qty' and not val.isdigit():
+                    print("Invalid quantity: {val}")
+                    continue
+                self.db[index].set_fields({field: val})
+                print(F" Set {field} to {val}")
+        print(f"Finished editing:\n{self.db[index]}")
+
+            
+
+
+
+        
+
     def get_next_id(self):
         '''Returns next available component ID in the database. Calls 
         `sort_db()' before execution.'''
