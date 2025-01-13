@@ -46,18 +46,20 @@ class ManagerCLI(Cmd):
             print(e)
     
     def emptyline(self):
-        '''Class method override.'''
+        '''Class method override. Called when an empty line is entered in 
+        response to the prompt.'''
         pass
 
     def default(self, line):
-        '''Class method override.'''
+        '''Class method override. Called when the command prefix is not 
+        recognized.'''
         print(f'Unknown command: {line}')
         pass
     
     def postloop(self):
-        '''Class method override.'''
+        '''Class method override. Called when the application is terminating.'''
         print('Goodbye!')
-    
+        
     def do_EOF(self, _):
         '''Quits Manager if EOF is encountered.'''
         return True
