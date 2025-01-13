@@ -29,9 +29,11 @@ class ManagerCLI(Cmd):
         print(*(repr(comp) for comp in self.mngr.db), sep='\n')
     
     def do_add(self, _):
+        '''Launches a dialogue to add a new component to the database.'''
         self.mngr.add_new_component()
     
     def do_edit(self, _):
+        '''Launches a dialogue to edit an existing component.'''
         self.mngr.edit_component()
 
     def do_shell(self, line):

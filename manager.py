@@ -34,27 +34,32 @@ class Manager:
         component is added and `sort_db' is called. The `id' field is set 
         automatically. The `qty' field must be a positive integer. Other 
         fields are cast to float if possible. '''
+        # get a valid component name, retry if failed
         while (new_comp := get_component(input('Enter component name: '))) is None:
             pass
         new_comp = new_comp()
         for field in new_comp.get_all_fields():
+            # set id automatically
             if field == 'id':
                 new_comp.set_fields({'id': self.get_next_id()})
+            # get a positive integer for quantity, retry if failed
             elif field == 'qty':
                 while not (qty := input('Enter quantity: ')).isdigit():
                     pass
                 new_comp.set_fields({'qty': int(qty)})
+            # everything looks good, set the field
             else:
                 val = input(f"Enter {field}: ")
                 try:
-                    val = float(val)
+                    val = float(val) # if its a number, keep it a number
                 except:
                     pass
                 new_comp.set_fields({field: val})
 
+        # sanity check for the user
         while (reply := input(f"Add the following component? (y/n)\n{repr(new_comp)}\n").lower()) not in 'yn':
             pass
-
+        # now acually add the new component
         if reply == 'y':
             self.db.append(new_comp)
             self.sort_db()
@@ -71,7 +76,9 @@ class Manager:
         return -1
 
     def edit_component(self, sudo=False):
-        
+        '''Prompts the user for component ID and fields to edit. The entries 
+        are checked for validity, and in case of success, the field's value is 
+        updated accordingly. '''
         # get a valid component ID, ie one that exists, ie positive integer 
         # and present in the database
         index = -1
@@ -85,29 +92,25 @@ class Manager:
             except:
                 print(f"Invalid ID or component not found: {entry}")
         
-        
         print(f"Currently editing:\n{self.db[index]}\nID editable: {sudo}")
+        # keep asking user for fields, skip the routine and retry if one of 
+        # the validity checks fails
         while (field := input('Enter field name to edit, leave entry blank to finish editing: ')) != '':
-            if field not in self.db[index].get_all_field:
+            if field not in self.db[index].get_all_fields():
                 print(f"Invalid field: {field}")
             else:
                 if field == 'id' and not sudo:
                     print("Cannot edit ID.")
                     continue
-                val = input("Enter value for {field}: ")
+                val = input(f"Enter value for {field}: ")
                 if field == 'qty' and not val.isdigit():
-                    print("Invalid quantity: {val}")
+                    print(f"Invalid quantity: {val}")
                     continue
+                # now actually set the field
                 self.db[index].set_fields({field: val})
-                print(F" Set {field} to {val}")
+                print(f" Set {field} to {val}")
         print(f"Finished editing:\n{self.db[index]}")
-
-            
-
-
-
-        
-
+    
     def get_next_id(self):
         '''Returns next available component ID in the database. Calls 
         `sort_db()' before execution.'''
