@@ -22,11 +22,11 @@ class ManagerCLI(Cmd):
     def do_load(self, _):
         '''Loads database from file.'''
         self.paths = list(Path().glob('*.bin'))
-        #if not self.saved: # prompt user before they discard all the changes
-        #    while (reply := input(f"Save the database before loading another? (y/n): ")) not in 'yn':
-        #        pass
-        #    if reply == 'y':
-        #        self.do_save(None)
+        if not self.saved: # prompt user before they discard all the changes
+            while (reply := input(f"Save the database before loading another? (y/n): ")) not in 'yn':
+                pass
+            if reply == 'y':
+                self.do_save(None)
         if len(self.paths) == 0:
             print('No database files found!')
             return
@@ -53,8 +53,11 @@ class ManagerCLI(Cmd):
     
     def do_save(self, _):
         '''Saves current database to file.'''
-        self.mngr.save_db()
-        self.saved = True
+        if self.mngr.db_path is None:
+            self.do_saveas(None)
+        else:
+            self.mngr.save_db()
+            self.saved = True
 
     def do_saveas(self, _):
         '''Saves a new database to file.'''
