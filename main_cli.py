@@ -46,14 +46,22 @@ class ManagerCLI(Cmd):
         self.mngr.add_new_component()
         self.saved = False
     
-    def do_edit(self, _):
+    def do_edit(self, line):
         '''Launches a dialogue to edit an existing component.'''
-        self.mngr.edit_component()
+        tokens = line.split()
+        if len(tokens) == 0:
+            tokens.append(None)
+        if len(tokens) == 1:
+            tokens.append(False)
+        else:
+            tokens[1] = tokens[1] == 'sudo'
+        
+        self.mngr.edit_component(tokens[0], tokens[1])
         self.saved = False
 
-    def do_delete(self, _):
+    def do_delete(self, id):
         '''Launches a dialogue to delete an existing component.'''
-        self.mngr.delete_component()
+        self.mngr.delete_component(id)
         self.saved = False
 
     def do_shell(self, line):

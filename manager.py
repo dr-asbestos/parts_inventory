@@ -75,22 +75,26 @@ class Manager:
                 return index
         return -1
 
-    def edit_component(self, sudo=False):
+    def edit_component(self, id=None, sudo=False):
         '''Prompts the user for component ID and fields to edit. The entries 
         are checked for validity, and in case of success, the field's value is 
         updated accordingly. '''
         # get a valid component ID, ie one that exists, ie positive integer 
         # and present in the database
-        index = -1
-        while True:
-            try:
+        if sudo:
+            print('WARNING! ID editing is enabled, proceed at your own risk!')
+        
+        try:
+            if id is None:
                 entry = input("Enter component ID: ")
-                index = self.get_comp_index_by_id(int(entry))
-                if index == -1:
-                    raise
-                break
-            except:
-                print(f"Invalid ID or component not found: {entry}")
+            else:
+                entry = id
+            index = self.get_comp_index_by_id(int(entry))
+            if index == -1:
+                raise
+        except:
+            print(f"Invalid ID or component not found: {entry}")
+            return
         
         print(f"Currently editing:\n{self.db[index]}\nID editable: {sudo}")
         # keep asking user for fields, skip the routine and retry if one of 
@@ -103,26 +107,28 @@ class Manager:
                     print("Cannot edit ID.")
                     continue
                 val = input(f"Enter value for {field}: ")
-                if field == 'qty' and not val.isdigit():
-                    print(f"Invalid quantity: {val}")
+                if (field == 'qty' or field == 'id') and not val.isdigit():
+                    print(f"Invalid value: {val}")
                     continue
                 # now actually set the field
                 self.db[index].set_fields({field: val})
                 print(f" Set {field} to {val}")
         print(f"Finished editing:\n{self.db[index]}")
 
-    def delete_component(self):
-        '''todowrite me'''
-        index = -1
-        while True:
-            try:
+    def delete_component(self, id=None):
+        '''Prompts the user for component ID and on positive confirmation 
+        deletes the component from the database.'''
+        try:
+            if id is None:
                 entry = input("Enter component ID: ")
-                index = self.get_comp_index_by_id(int(entry))
-                if index == -1:
-                    raise
-                break
-            except:
-                print(f"Invalid ID or component not found: {entry}")
+            else:
+                entry = id
+            index = self.get_comp_index_by_id(int(entry))
+            if index == -1:
+                raise
+        except:
+            print(f"Invalid ID or component not found: {entry}")
+            return
 
         # sanity check for the user
         while (reply := input(f"Delete the following component? (y/n)\n{repr(self.db[index])}\n").lower()) not in 'yn':
