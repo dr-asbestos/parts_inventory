@@ -41,6 +41,8 @@ def get_component(name):
             return BJT
         case 'mosfet' | 'nfet' | 'pfet' | 'nmos' | 'pmos' | 'field_effect':
             return MOSFET
+        case 'jfet':
+            return JFET
         case _:
             return None
 
