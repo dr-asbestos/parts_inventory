@@ -65,11 +65,14 @@ class ManagerCLI(Cmd):
         self.saved = False
 
     def do_shell(self, line):
-        '''Execute arbitrary Python code and prints return value. Command '!' 
-        is synonym for 'shell'. For debugging purposes only. Don't do 
-        anything naughty. pls. '''
+        '''Execute arbitrary Python code and prints return value. Command `!' 
+        is synonym for 'shell'. Command `!!' wraps the code in a `print()'. 
+        For debugging purposes only. Don't do anything naughty. pls. '''
         try:
-            exec(f"print({line})")
+            if line[0] == '!': # for !!
+                exec(f"print({line[1:]})")
+            else:
+                exec(line)
         except Exception as e:
             print(e)
     
