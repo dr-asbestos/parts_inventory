@@ -35,7 +35,7 @@ class Manager:
         automatically. The `qty' field must be a positive integer. Other 
         fields are cast to float if possible. '''
         # get a valid component name, retry if failed
-        while (new_comp := get_component(input('Enter component name: '))) is None:
+        while (new_comp := get_component(input('Enter component class: '))) is None:
             pass
         new_comp = new_comp()
         for field in new_comp.get_all_fields():
