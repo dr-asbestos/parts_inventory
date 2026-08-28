@@ -1,4 +1,5 @@
 from cmd import Cmd
+from pathlib import Path
 from manager import Manager
 
 class ManagerCLI(Cmd):
@@ -6,11 +7,13 @@ class ManagerCLI(Cmd):
     prompt = 'Mngr>> '
     intro = 'Electronic Parts Inventory Manager v1.0.0\nType "help" for available commands'
     
-    def __init__(self, mngr, spacing=' '):
+    def __init__(self, spacing=' '):
         super().__init__()
-        self.mngr = mngr
+        self.mngr = Manager()
+        self.paths = list(Path().glob('*.bin'))
         self.spacing = spacing
         self.saved = True
+        
     
     def do_hi(self, line):
         '''Just a test command.'''
@@ -18,11 +21,31 @@ class ManagerCLI(Cmd):
 
     def do_load(self, _):
         '''Loads database from file.'''
-        if not self.saved: # prompt user before they discard all the changes
-            while (reply := input(f"Save the database before loading another? (y/n): ")) not in 'yn':
-                pass
-            if reply == 'y':
-                self.do_save(None)
+        #if not self.saved: # prompt user before they discard all the changes
+        #    while (reply := input(f"Save the database before loading another? (y/n): ")) not in 'yn':
+        #        pass
+        #    if reply == 'y':
+        #        self.do_save(None)
+        if len(self.paths) == 0:
+            print('No database files found!')
+            return
+        print('Select file to load (leave entry blank to abort): ')
+        for i, path in enumerate(self.paths):
+            print(f'{i}: {path}')
+        while True:
+            select = input()
+            try:
+                if select == '':
+                    return
+                select = int(select)
+                if select not in range(len(self.paths)):
+                    raise
+                break
+            except:
+                print('Invalid selection!')
+                continue
+        
+        self.mngr.db_path = self.paths[select]
         self.mngr.load_db()
         self.saved = True
         print(f"Loaded database file: {self.mngr.db_path}")
@@ -137,4 +160,4 @@ class ManagerCLI(Cmd):
 
 
 if __name__ == '__main__':
-    ManagerCLI(Manager(db_path='inventory_test.bin')).cmdloop()
+    ManagerCLI().cmdloop()
