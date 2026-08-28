@@ -50,13 +50,11 @@ class ManagerCLI(Cmd):
         self.mngr.db_path = self.paths[select]
         self.mngr.load_db()
         self.saved = True
-        print(f"Loaded database file: {self.mngr.db_path}")
     
     def do_save(self, _):
         '''Saves current database to file.'''
         self.mngr.save_db()
         self.saved = True
-        print(f"Saved database file: {self.mngr.db_path}")
 
     def do_saveas(self, _):
         '''Saves a new database to file.'''

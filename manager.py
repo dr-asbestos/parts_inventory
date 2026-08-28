@@ -11,6 +11,7 @@ class Manager:
         try:
             with open(self.db_path, mode='rb') as file:
                 self.db = pickle.load(file)
+                print(f"Loaded database file: {self.db_path}")
         except Exception as e:
             print(f'An error occurred when loading {self.db_path}: {e}')
             self.db_path = None
@@ -20,6 +21,7 @@ class Manager:
         try:
             with open(self.db_path, mode='wb') as file:
                 pickle.dump(self.db, file)
+                print(f"Saved database file: {self.db_path}")
         except Exception as e:
             print(f'An error occurred when saving {self.db_path}: {e}')
     
