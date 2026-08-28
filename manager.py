@@ -110,6 +110,29 @@ class Manager:
                 self.db[index].set_fields({field: val})
                 print(f" Set {field} to {val}")
         print(f"Finished editing:\n{self.db[index]}")
+
+    def delete_component(self):
+        '''todowrite me'''
+        index = -1
+        while True:
+            try:
+                entry = input("Enter component ID: ")
+                index = self.get_comp_index_by_id(int(entry))
+                if index == -1:
+                    raise
+                break
+            except:
+                print(f"Invalid ID or component not found: {entry}")
+
+        # sanity check for the user
+        while (reply := input(f"Delete the following component? (y/n)\n{repr(self.db[index])}\n").lower()) not in 'yn':
+            pass
+        if reply == 'y':
+            self.db.pop(index)
+            self.sort_db()
+            print('Deleted component.')
+        else:
+            print('Operation aborted.')
     
     def get_next_id(self):
         '''Returns next available component ID in the database. Calls 

@@ -51,6 +51,11 @@ class ManagerCLI(Cmd):
         self.mngr.edit_component()
         self.saved = False
 
+    def do_delete(self, _):
+        '''Launches a dialogue to delete an existing component.'''
+        self.mngr.delete_component()
+        self.saved = False
+
     def do_shell(self, line):
         '''Execute arbitrary Python code and prints return value. Command '!' 
         is synonym for 'shell'. For debugging purposes only. Don't do 
