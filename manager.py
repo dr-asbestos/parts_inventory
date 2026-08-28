@@ -107,9 +107,13 @@ class Manager:
                     print("Cannot edit ID.")
                     continue
                 val = input(f"Enter value for {field}: ")
-                if (field == 'qty' or field == 'id') and not val.isdigit():
-                    print(f"Invalid value: {val}")
-                    continue
+                # the two fields that must be an integer
+                if (field == 'qty' or field == 'id'):
+                    if val.isdigit():
+                        val = int(val)
+                    else:
+                        print(f"Invalid value: {val}")
+                        continue
                 # now actually set the field
                 self.db[index].set_fields({field: val})
                 print(f" Set {field} to {val}")
