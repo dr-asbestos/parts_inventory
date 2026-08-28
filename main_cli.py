@@ -21,6 +21,7 @@ class ManagerCLI(Cmd):
 
     def do_load(self, _):
         '''Loads database from file.'''
+        self.paths = list(Path().glob('*.bin'))
         #if not self.saved: # prompt user before they discard all the changes
         #    while (reply := input(f"Save the database before loading another? (y/n): ")) not in 'yn':
         #        pass
@@ -36,6 +37,7 @@ class ManagerCLI(Cmd):
             select = input()
             try:
                 if select == '':
+                    print('Load aborted.')
                     return
                 select = int(select)
                 if select not in range(len(self.paths)):
@@ -72,6 +74,7 @@ class ManagerCLI(Cmd):
     
     def do_printdb(self, _):
         '''Prints whole database. For debugging purposes.'''
+        print(f'Path: {self.mngr.db_path}')
         print(*(repr(comp) for comp in self.mngr.db), sep='\n')
 
     def do_printdefs(self, _):
