@@ -51,10 +51,24 @@ class ManagerCLI(Cmd):
         print(f"Loaded database file: {self.mngr.db_path}")
     
     def do_save(self, _):
-        '''Saves the database to file.'''
+        '''Saves current database to file.'''
         self.mngr.save_db()
         self.saved = True
         print(f"Saved database file: {self.mngr.db_path}")
+
+    def do_saveas(self, _):
+        '''Saves a new database to file.'''
+        illegal_chars = r'<>:"/\|?*'
+        while True:
+            name = input('Please enter new file name: ')
+            for c in illegal_chars:
+                if c in name:
+                    print('Illegal file name!')
+                    continue
+
+            break
+        self.mngr.db_path = f'{name}.bin'
+        self.do_save(None)
     
     def do_printdb(self, _):
         '''Prints whole database. For debugging purposes.'''
