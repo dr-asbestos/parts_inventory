@@ -122,4 +122,12 @@ class Manager:
                 next_id = i
                 break
         return next_id
-        
+
+    def print_component_tree(self, cls=Component, tab=0):
+        '''Prints foramtted component definitions tree.'''
+        mark = "|---" if tab > 0 else ""
+        print(f"{'|   ' * (tab-1)}{mark}{cls.__name__}: {cls.__slots__}")
+        for subcls in cls.__subclasses__():
+            self.print_component_tree(subcls, tab+1)
+            
+    

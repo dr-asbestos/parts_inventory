@@ -36,6 +36,10 @@ class ManagerCLI(Cmd):
     def do_printdb(self, _):
         '''Prints whole database. For debugging purposes.'''
         print(*(repr(comp) for comp in self.mngr.db), sep='\n')
+
+    def do_printdefs(self, _):
+        '''Prints component definitions tree.'''
+        self.mngr.print_component_tree()
     
     def do_add(self, _):
         '''Launches a dialogue to add a new component to the database.'''
