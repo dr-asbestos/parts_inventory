@@ -12,7 +12,8 @@ class Manager:
             with open(self.db_path, mode='rb') as file:
                 self.db = pickle.load(file)
         except Exception as e:
-            print(e)
+            print(f'An error occurred when loading {self.db_path}: {e}')
+            self.db_path = None
 
     def save_db(self):
         '''Pickles the database to filepath.'''
@@ -20,7 +21,7 @@ class Manager:
             with open(self.db_path, mode='wb') as file:
                 pickle.dump(self.db, file)
         except Exception as e:
-            print(e)
+            print(f'An error occurred when saving {self.db_path}: {e}')
     
     def sort_db(self):
         '''Sorts the loaded database in-situ by component ID.'''
