@@ -69,7 +69,7 @@ class ManagerCLI(Cmd):
         is synonym for 'shell'. For debugging purposes only. Don't do 
         anything naughty. pls. '''
         try:
-            print(exec(line))
+            exec(f"print({line})")
         except Exception as e:
             print(e)
     
