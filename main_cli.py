@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from cmd import Cmd
 from pathlib import Path
 from manager import Manager
