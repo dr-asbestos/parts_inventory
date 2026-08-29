@@ -2,12 +2,21 @@
 
 from cmd import Cmd
 from pathlib import Path
+from argparse import ArgumentParser
+from inspect import cleandoc
 from manager import Manager
 
 class ManagerCLI(Cmd):
     '''todo: write me'''
     prompt = 'Mngr>> '
     intro = 'Electronic Parts Inventory Manager v1.0.0\nType "help" for available commands'
+
+    parser_edit = ArgumentParser(prog='edit')
+    parser_edit.add_argument('-s', '--sudo', action="store_true", help='Allow ID editing. Use at your own risk.')
+    parser_edit.add_argument('-i', '--id', type=int, help='Select item by ID. If not specified, enter dialogue.')
+    parser_edit.add_argument('-f', '--field', type=str, help='Select item field, must use -i.')
+    parser_edit.add_argument('-v', '--value', type=str, help='Specify new field value, must use -f.')
+
     
     def __init__(self, spacing=' '):
         super().__init__()
@@ -87,18 +96,38 @@ class ManagerCLI(Cmd):
         '''Launches a dialogue to add a new component to the database.'''
         self.mngr.add_new_component()
         self.saved = False
+
+    def help_edit(self):
+        print(cleandoc(self.do_edit.__doc__))
+        self.parser_edit.print_help()
     
     def do_edit(self, line):
         '''Launches a dialogue to edit an existing component.'''
-        tokens = line.split()
-        if len(tokens) == 0:
-            tokens.append(None)
-        if len(tokens) == 1:
-            tokens.append(False)
-        else:
-            tokens[1] = tokens[1] == 'sudo'
+        #tokens = line.split()
+        #if len(tokens) == 0:
+        #    tokens.append(None)
+        #if len(tokens) == 1:
+        #    tokens.append(False)
+        #else:
+        #    tokens[1] = tokens[1] == 'sudo'
+
+        try:
+            args = self.parser_edit.parse_args(line.split())
+            print(args)
+            if args.sudo:
+                print('doing sudo!')
+
+            if args.id is None and args.field:
+                self.parser_edit.error('--id required for --field')
+            if args.field is None and args.value:
+                self.parser_edit.error('--field required for --value')
+
+            print(f"editing ID: {args.id} {f'Field: {args.field}' if args.field else ''} {f'Value: {args.value}' if args.value else ''}")
+        except SystemExit:
+            pass
+
         
-        self.mngr.edit_component(tokens[0], tokens[1])
+        #self.mngr.edit_component(tokens[0], tokens[1])
         self.saved = False
 
     def do_delete(self, id):
