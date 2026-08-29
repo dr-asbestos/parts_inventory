@@ -59,6 +59,10 @@ class Component:
     
     def __repr__(self):
         return f"{self.__class__.__name__}: {self.get_fields_dict()}"
+
+    def __str__(self):
+        fields = self.get_fields_dict()
+        return f"ID: {fields['id']:>3} Qty: {fields['qty']:>4} Part: {fields['part_number'] if 'part_number' in fields.keys() else fields['value']:<15} {fields['description']}"
     
     def set_fields(self, fields):
         '''Takes a dictionary of fields and values, and sets this component's 
