@@ -98,37 +98,24 @@ class ManagerCLI(Cmd):
         self.saved = False
 
     def help_edit(self):
+        '''Prints help for `do_edit'.'''
         print(cleandoc(self.do_edit.__doc__))
         self.parser_edit.print_help()
     
     def do_edit(self, line):
         '''Launches a dialogue to edit an existing component.'''
-        #tokens = line.split()
-        #if len(tokens) == 0:
-        #    tokens.append(None)
-        #if len(tokens) == 1:
-        #    tokens.append(False)
-        #else:
-        #    tokens[1] = tokens[1] == 'sudo'
-
         try:
             args = self.parser_edit.parse_args(line.split())
-            print(args)
-            if args.sudo:
-                print('doing sudo!')
-
             if args.id is None and args.field:
                 self.parser_edit.error('--id required for --field')
             if args.field is None and args.value:
                 self.parser_edit.error('--field required for --value')
 
-            print(f"editing ID: {args.id} {f'Field: {args.field}' if args.field else ''} {f'Value: {args.value}' if args.value else ''}")
         except SystemExit:
             pass
-
-        
-        #self.mngr.edit_component(tokens[0], tokens[1])
-        self.saved = False
+        else:
+            self.mngr.edit_component(**args.__dict__)
+            self.saved = False
 
     def do_delete(self, id):
         '''Launches a dialogue to delete an existing component.'''
@@ -180,11 +167,11 @@ class ManagerCLI(Cmd):
         # prompt user if they actually want to quit and if they want to 
         # discard all the changes to the database
         if stop: 
-            while (reply := input(f"Are you sure you want to quit? (y/n): ")) not in 'yn':
+            while (reply := input(f"Are you sure you want to quit? (y/n): ").lower()) not in 'yn':
                 pass
             if reply == 'y':
                 if not self.saved:
-                    while (reply := input(f"Save the database before quitting? (y/n): ")) not in 'yn':
+                    while (reply := input(f"Save the database before quitting? (y/n): ").lower()) not in 'yn':
                         pass
                     if reply == 'y':
                         self.do_save(None)

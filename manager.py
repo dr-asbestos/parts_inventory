@@ -78,10 +78,11 @@ class Manager:
                 return index
         return -1
 
-    def edit_component(self, id=None, sudo=False):
+    def edit_component(self, id=None, field=None, value=None, sudo=False):
         '''Prompts the user for component ID and fields to edit. The entries 
         are checked for validity, and in case of success, the field's value is 
         updated accordingly. '''
+        print(f'{id=} {field=} {value=} {sudo=}')
         # get a valid component ID, ie one that exists, ie positive integer 
         # and present in the database
         if sudo:
@@ -89,38 +90,53 @@ class Manager:
         
         try:
             if id is None:
-                entry = input("Enter component ID: ")
-            else:
-                entry = id
-            index = self.get_comp_index_by_id(int(entry))
+                id = input("Enter component ID: ")
+            index = self.get_comp_index_by_id(int(id))
             if index == -1:
                 raise
         except:
-            print(f"Invalid ID or component not found: {entry}")
+            print(f"Invalid ID or component not found: {id}")
             return
         
         print(f"Currently editing:\n{repr(self.db[index])}\nID editable: {sudo}")
         # keep asking user for fields, skip the routine and retry if one of 
         # the validity checks fails
-        while (field := input('Enter field name to edit, leave entry blank to finish editing: ')) != '':
+        while True:
+            if field is None: # ask if field wasnt specified or this is a retry
+                field = input('Enter field name to edit, leave entry blank to finish editing: ')
+
+            if field == '': # done editing
+                break
+
             if field not in self.db[index].get_all_fields():
                 print(f"Invalid field: {field}")
+                field = None
             else:
                 if field == 'id' and not sudo:
                     print("Cannot edit ID.")
+                    field = None
                     continue
-                val = input(f"Enter value for {field}: ")
-                # the two fields that must be an integer
-                if (field == 'qty' or field == 'id'):
-                    if val.isdigit():
-                        val = int(val)
+
+                if value is None:
+                    value = input(f"Enter value for {field}: ")
+
+                if (field == 'qty' or field == 'id'): # the two fields that must be an integer
+                    if value.isdigit():
+                        value = int(value)
+                        if field == 'id' and value in (comp.id for comp in self.db):
+                            print(f"ID already present: {value}")
+                            field, value = None, None
+                            continue
                     else:
-                        print(f"Invalid value: {val}")
+                        print(f"Invalid value: {value}")
+                        field, value = None, None
                         continue
+                
                 # now actually set the field
-                self.db[index].set_fields({field: val})
-                print(f" Set {field} to {val}")
-        print(f"Finished editing:\n{str(self.db[index])}")
+                self.db[index].set_fields({field: value})
+                print(f" Set {field} to {value}")
+                field, value = None, None
+        print(f"Finished editing:\n{repr(self.db[index])}")
 
     def delete_component(self, id=None):
         '''Prompts the user for component ID and on positive confirmation 
