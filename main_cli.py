@@ -20,6 +20,13 @@ class ManagerCLI(Cmd):
     parser_delete = ArgumentParser(prog='delete')
     parser_delete.add_argument('-i', '--id', type=int, help='Select item by ID. If not specified, enter dialogue.')
 
+    parser_find = ArgumentParser(prog='find')
+    parser_find.add_argument('prompt', nargs='?', default='', help='Search prompt, can be blank.')
+    parser_find.add_argument('-f', '--field', nargs='+', help='Search within specified fields.')
+    group = parser_find.add_mutually_exclusive_group()
+    group.add_argument('-c', '--class', nargs='+', help='Search through specified classes and their subclasses.')
+    group.add_argument('-C', '--class-strict', nargs='+', help='Search through specified classes.')
+
     
     def __init__(self, spacing=' '):
         super().__init__()
@@ -134,6 +141,20 @@ class ManagerCLI(Cmd):
         else:
             self.mngr.delete_component(args.id)
             self.saved = False
+
+    def help_find(self):
+        '''Prints help for `do_find'.'''
+        print(cleandoc(self.do_find.__doc__))
+        self.parser_find.print_help()
+
+    def do_find(self, line):
+        '''Database search function.'''
+        try:
+            args = self.parser_find.parse_args(line.split())
+        except SystemExit:
+            pass
+        else:
+            print(args)
 
     def do_shell(self, line):
         '''Execute arbitrary Python code and prints return value. Command `!' 
