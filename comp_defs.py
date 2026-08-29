@@ -50,7 +50,7 @@ def get_component(name):
 class Component:
     '''Generic component definition and functions.'''
     # the order of 'importance' of the fields is increasing
-    __slots__ = ('description', 'mounting', 'package', 'qty', 'id')
+    __slots__ = ('datasheet_link', 'description', 'mounting', 'package', 'qty', 'id')
     def __init__(self):
         '''Dynamically create all class fields from __slots__.'''
         for slots in (getattr(cls, '__slots__', ()) for cls in self.__class__.__mro__):
