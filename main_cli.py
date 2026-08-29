@@ -15,7 +15,6 @@ class ManagerCLI(Cmd):
         self.paths = list(Path().glob('*.bin'))
         self.spacing = spacing
         self.saved = True
-        
     
     def do_hi(self, line):
         '''Just a test command.'''
