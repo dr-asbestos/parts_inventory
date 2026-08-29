@@ -17,6 +17,9 @@ class ManagerCLI(Cmd):
     parser_edit.add_argument('-f', '--field', type=str, help='Select item field, must use -i.')
     parser_edit.add_argument('-v', '--value', type=str, help='Specify new field value, must use -f.')
 
+    parser_delete = ArgumentParser(prog='delete')
+    parser_delete.add_argument('-i', '--id', type=int, help='Select item by ID. If not specified, enter dialogue.')
+
     
     def __init__(self, spacing=' '):
         super().__init__()
@@ -117,10 +120,20 @@ class ManagerCLI(Cmd):
             self.mngr.edit_component(**args.__dict__)
             self.saved = False
 
-    def do_delete(self, id):
+    def help_delete(self):
+        '''Prints help for `do_delete'.'''
+        print(cleandoc(self.do_delete.__doc__))
+        self.parser_delete.print_help()
+    
+    def do_delete(self, line):
         '''Launches a dialogue to delete an existing component.'''
-        self.mngr.delete_component(id)
-        self.saved = False
+        try:
+            args = self.parser_delete.parse_args(line.split())
+        except SystemExit:
+            pass
+        else:
+            self.mngr.delete_component(args.id)
+            self.saved = False
 
     def do_shell(self, line):
         '''Execute arbitrary Python code and prints return value. Command `!' 

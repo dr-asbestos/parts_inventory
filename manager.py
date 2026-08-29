@@ -143,14 +143,12 @@ class Manager:
         deletes the component from the database.'''
         try:
             if id is None:
-                entry = input("Enter component ID: ")
-            else:
-                entry = id
-            index = self.get_comp_index_by_id(int(entry))
+                id = input("Enter component ID: ")
+            index = self.get_comp_index_by_id(int(id))
             if index == -1:
                 raise
         except:
-            print(f"Invalid ID or component not found: {entry}")
+            print(f"Invalid ID or component not found: {id}")
             return
 
         # sanity check for the user
