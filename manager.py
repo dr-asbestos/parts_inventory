@@ -99,7 +99,7 @@ class Manager:
             print(f"Invalid ID or component not found: {entry}")
             return
         
-        print(f"Currently editing:\n{self.db[index]}\nID editable: {sudo}")
+        print(f"Currently editing:\n{repr(self.db[index])}\nID editable: {sudo}")
         # keep asking user for fields, skip the routine and retry if one of 
         # the validity checks fails
         while (field := input('Enter field name to edit, leave entry blank to finish editing: ')) != '':
@@ -120,7 +120,7 @@ class Manager:
                 # now actually set the field
                 self.db[index].set_fields({field: val})
                 print(f" Set {field} to {val}")
-        print(f"Finished editing:\n{self.db[index]}")
+        print(f"Finished editing:\n{str(self.db[index])}")
 
     def delete_component(self, id=None):
         '''Prompts the user for component ID and on positive confirmation 

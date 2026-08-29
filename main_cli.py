@@ -77,7 +77,7 @@ class ManagerCLI(Cmd):
     def do_printdb(self, _):
         '''Prints whole database. For debugging purposes.'''
         print(f'Path: {self.mngr.db_path}')
-        print(*(repr(comp) for comp in self.mngr.db), sep='\n')
+        print(*(str(comp) for comp in self.mngr.db), sep='\n')
 
     def do_printdefs(self, _):
         '''Prints component definitions tree.'''
