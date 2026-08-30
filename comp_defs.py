@@ -22,7 +22,7 @@ def get_component(name):
         case 'rv' | 'vr' | 'pot' | 'potentiometer':
             return Potentiometer
         case 'ic' | 'integrated_circuit':
-            return IntegratedCircuit
+            return IC
         case 'analog' | 'analogue':
             return Analog
         case 'comp' | 'comparator':
@@ -125,12 +125,12 @@ class Potentiometer(Passive):
     def __init__(self):
         super().__init__()
 
-class IntegratedCircuit(Component):
+class IC(Component):
     __slots__ = ('part_number',)
     def __init__(self):
         super().__init__()
 
-class Analog(IntegratedCircuit):
+class Analog(IC):
     __slots__ = ('channels',)
     def __init__(self):
         super().__init__()
@@ -145,7 +145,7 @@ class OpAmp(Analog):
     def __init__(self):
         super().__init__()
 
-class Digital(IntegratedCircuit):
+class Digital(IC):
     __slots__ = ('family',)
     def __init__(self):
         super().__init__()
@@ -155,7 +155,7 @@ class Logic(Digital):
     def __init__(self):
         super().__init__()
 
-class Regulator(IntegratedCircuit):
+class Regulator(IC):
     __slots__ = ('i_o', 'v_o', 'v_i')
     def __init__(self):
         super().__init__()
@@ -181,7 +181,7 @@ class JFET(Transistor):
     def __init__(self):
         super().__init__()
 
-class OptoCoupler(IntegratedCircuit):
+class OptoCoupler(IC):
     __slots__ = ('features',)
     def __init__(self):
         super().__init__()
