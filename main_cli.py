@@ -12,15 +12,15 @@ class ManagerCLI(Cmd):
     intro = 'Electronic Parts Inventory Manager v1.0.0\nType "help" for available commands'
 
     parser_edit = ArgumentParser(prog='edit')
-    parser_edit.add_argument('-s', '--sudo', action="store_true", help='Allow ID editing. Use at your own risk.')
+    parser_edit.add_argument('-s', '--sudo', action='store_true', help='Allow ID editing. Use at your own risk.')
     parser_edit.add_argument('-i', '--id', type=int, help='Select item by ID. If not specified, enter dialogue.')
     parser_edit.add_argument('-f', '--field', type=str, help='Select item field, must use -i.')
     parser_edit.add_argument('-v', '--value', type=str, help='Specify new field value, must use -f.')
 
     parser_delete = ArgumentParser(prog='delete')
-    parser_delete.add_argument('-i', '--id', type=int, help='Select item by ID. If not specified, enter dialogue.')
+    parser_delete.add_argument('-i', '--id', type=int, help='Select item to delete by ID. If not specified, enter dialogue.')
 
-    parser_find = ArgumentParser(prog='find')
+    parser_find = ArgumentParser(prog='find', usage='find [-h] [prompt] [-f FIELDS [FIELDS ...]] [-c CLSS [CLSS ...]]')
     parser_find.add_argument('prompt', nargs='?', default='', help='Search prompt, can be blank.')
     parser_find.add_argument('-f', '--fields', nargs='+', help='Search within specified fields.')
     parser_find.add_argument('-c', '--clss', nargs='+', help='Search through specified classes.')
@@ -28,6 +28,10 @@ class ManagerCLI(Cmd):
     #group = parser_find.add_mutually_exclusive_group()
     #group.add_argument('-c', '--class', nargs='+', help='Search through specified classes and their subclasses.')
     #group.add_argument('-C', '--class-strict', nargs='+', help='Search through specified classes.')
+
+    parser_view = ArgumentParser(prog='view')
+    parser_view.add_argument('id', type=int, help='Select item to view by ID.')
+    parser_view.add_argument('-v', '--verbose', action='store_true', help='More detailed view on the item.')
 
     
     def __init__(self, spacing=' '):
@@ -157,6 +161,20 @@ class ManagerCLI(Cmd):
             pass
         else:
             self.mngr.find_component(**args.__dict__)
+
+    def help_view(self):
+        '''Prints help for `do_view'.'''
+        print(cleandoc(self.do_view.__doc__))
+        self.parser_view.print_help()
+
+    def do_view(self, line):
+        '''Show item details.'''
+        try:
+            args = self.parser_view.parse_args(line.split())
+        except SystemExit:
+            pass
+        else:
+            self.mngr.view_component(**args.__dict__)
 
     def do_shell(self, line):
         '''Execute arbitrary Python code and prints return value. Command `!' 

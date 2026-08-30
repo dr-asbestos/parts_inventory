@@ -189,6 +189,21 @@ class Manager:
 
         # print results
         print(*(str(comp) for comp in found_comps), sep='\n')
+
+    def view_component(self, id=None, verbose=False):
+        '''Prints component fields.'''
+        try:
+            index = self.get_comp_index_by_id(int(id))
+            if index == -1:
+                raise
+        except:
+            print(f"Invalid ID or component not found: {id}")
+            return
+        
+        if verbose:
+            print(repr(self.db[index]))
+        else:
+            print(str(self.db[index]))
     
     def get_next_id(self):
         '''Returns next available component ID in the database. Calls 
