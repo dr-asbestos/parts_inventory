@@ -82,7 +82,6 @@ class Manager:
         '''Prompts the user for component ID and fields to edit. The entries 
         are checked for validity, and in case of success, the field's value is 
         updated accordingly. '''
-        print(f'{id=} {field=} {value=} {sudo=}')
         # get a valid component ID, ie one that exists, ie positive integer 
         # and present in the database
         if sudo:
@@ -160,6 +159,21 @@ class Manager:
             print('Deleted component.')
         else:
             print('Operation aborted.')
+
+    def find_component(self, prompt, clss=None, fields=None):
+        '''Returns a list of components that satisfy search paramenters.'''
+        print(f"{prompt=} {clss=} {fields=}")
+        found_comps = self.db
+        if clss is not None:
+            clss = (get_component(cls) for cls in clss)
+            found_comps = filter(lambda x: type(x) in clss, found_comps)
+            print(*(str(comp) for comp in found_comps), sep='\n')
+
+        #filter()
+        for comp in self.db:
+
+            pass
+        pass
     
     def get_next_id(self):
         '''Returns next available component ID in the database. Calls 
