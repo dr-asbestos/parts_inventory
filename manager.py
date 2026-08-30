@@ -162,18 +162,33 @@ class Manager:
 
     def find_component(self, prompt, clss=None, fields=None):
         '''Returns a list of components that satisfy search paramenters.'''
-        print(f"{prompt=} {clss=} {fields=}")
         found_comps = self.db
-        if clss is not None:
-            clss = (get_component(cls) for cls in clss)
-            found_comps = filter(lambda x: type(x) in clss, found_comps)
-            print(*(str(comp) for comp in found_comps), sep='\n')
 
-        #filter()
-        for comp in self.db:
+        # filter by classes
+        if clss is not None: 
+            clss = list(get_component(cls) for cls in clss)
+            found_comps = list(filter(lambda x: type(x) in clss, found_comps))
 
-            pass
-        pass
+        # filter by fields
+        def _fields_filter(x): # too complicated for lambda
+            for f in x.get_all_fields():
+                if f in fields:
+                    return True
+            return False
+        if fields is not None:
+            found_comps = list(filter(_fields_filter, found_comps))
+
+        # filter by prompt
+        def _prompt_filter(x): # too complicated for lambda
+            _fields = x.get_all_fields() if fields is None else fields
+            for f in _fields:
+                if prompt in str(getattr(x, f, '')): 
+                    return True
+            return False
+        found_comps = list(filter(_prompt_filter, found_comps))
+
+        # print results
+        print(*(str(comp) for comp in found_comps), sep='\n')
     
     def get_next_id(self):
         '''Returns next available component ID in the database. Calls 
