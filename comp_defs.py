@@ -151,7 +151,7 @@ class Logic(Digital):
         super().__init__()
 
 class Regulator(IntegratedCircuit):
-    __slots__ = ('current', 'voltage')
+    __slots__ = ('i_o', 'v_o', 'v_i')
     def __init__(self):
         super().__init__()
 
