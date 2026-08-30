@@ -22,8 +22,8 @@ class ManagerCLI(Cmd):
 
     parser_find = ArgumentParser(prog='find')
     parser_find.add_argument('prompt', nargs='?', default='', help='Search prompt, can be blank.')
-    parser_find.add_argument('-f', '--field', nargs='+', help='Search within specified fields.')
-    parser_find.add_argument('-c', '--class', nargs='+', help='Search through specified classes.')
+    parser_find.add_argument('-f', '--fields', nargs='+', help='Search within specified fields.')
+    parser_find.add_argument('-c', '--clss', nargs='+', help='Search through specified classes.')
     # this is for when i decide i really want the subclasses too. 
     #group = parser_find.add_mutually_exclusive_group()
     #group.add_argument('-c', '--class', nargs='+', help='Search through specified classes and their subclasses.')
@@ -156,8 +156,7 @@ class ManagerCLI(Cmd):
         except SystemExit:
             pass
         else:
-            self.mngr.find_component('''**args.__dict__''')
-            #print(*(str(comp) for comp in self.mngr.find_component('''**args.__dict__''')), sep='\n')
+            self.mngr.find_component(**args.__dict__)
 
     def do_shell(self, line):
         '''Execute arbitrary Python code and prints return value. Command `!' 
