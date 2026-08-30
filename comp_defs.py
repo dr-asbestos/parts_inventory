@@ -64,7 +64,12 @@ class Component:
 
     def __str__(self):
         fields = self.get_fields_dict()
-        return f"ID: {fields['id']:>3} Qty: {fields['qty']:>4} Part: {fields['part_number'] if 'part_number' in fields.keys() else fields['value']:<15} {fields['description']}"
+        return  f"ID: {fields['id']:>3} "\
+                f"Qty: {fields['qty']:>4} "\
+                f"Class: {self.__class__.__name__:<10} "\
+                f"Part: {fields['part_number'] if 'part_number' in fields.keys() else fields['value']:<15} "\
+                f"{fields['description']} "\
+                f"{fields['function'] if 'function' in fields.keys() else ''}"
     
     def set_fields(self, fields):
         '''Takes a dictionary of fields and values, and sets this component's 
