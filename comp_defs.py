@@ -130,6 +130,12 @@ class IC(Component):
     def __init__(self):
         super().__init__()
 
+class IntegratedCircuit(Component):
+    # backwards compatability
+    __slots__ = ('part_number',)
+    def __init__(self):
+        super.__init__()
+
 class Analog(IC):
     __slots__ = ('channels',)
     def __init__(self):
