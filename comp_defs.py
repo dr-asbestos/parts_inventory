@@ -43,6 +43,8 @@ def get_component(name):
             return MOSFET
         case 'jfet':
             return JFET
+        case 'opto' | 'optocoupler' | 'optoisolator':
+            return OptoCoupler
         case _:
             return None
 
@@ -174,4 +176,9 @@ class JFET(Transistor):
     def __init__(self):
         super().__init__()
 
-#todo:add other components: igbt, switch, 
+class OptoCoupler(IntegratedCircuit):
+    __slots__ = ('features',)
+    def __init__(self):
+        super().__init__()
+
+
