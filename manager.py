@@ -1,5 +1,6 @@
 from comp_defs import *
 import pickle
+from copy import copy
 
 class Manager:
     def __init__(self, db_path=None, db=None):
@@ -136,6 +137,27 @@ class Manager:
                 print(f" Set {field} to {value}")
                 field, value = None, None
         print(f"Finished editing:\n{repr(self.db[index])}")
+
+    def clone_component(self, id=None, verbose=False):
+        '''Duplicate an item with a new ID.'''
+        try:
+            index = self.get_comp_index_by_id(int(id))
+            if index == -1:
+                raise
+        except:
+            print(f"Invalid ID or component not found: {id}")
+            return
+
+        new_comp = copy(self.db[index])
+        new_comp.set_fields({'id': self.get_next_id()})
+        self.db.append(new_comp)
+        self.sort_db()
+        print('Added new component.')
+        if verbose:
+            print(repr(new_comp))
+        else:
+            print(str(new_comp))
+
 
     def delete_component(self, id=None):
         '''Prompts the user for component ID and on positive confirmation 

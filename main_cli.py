@@ -33,6 +33,10 @@ class ManagerCLI(Cmd):
     parser_view.add_argument('id', type=int, help='Select item to view by ID.')
     parser_view.add_argument('-v', '--verbose', action='store_true', help='More detailed view on the item.')
 
+    parser_clone = ArgumentParser(prog='clone')
+    parser_clone.add_argument('id', type=int, help='Select item to view by ID.')
+    parser_clone.add_argument('-v', '--verbose', action='store_true', help='More detailed view on the new item.')
+
     
     def __init__(self, spacing=' '):
         super().__init__()
@@ -175,6 +179,21 @@ class ManagerCLI(Cmd):
             pass
         else:
             self.mngr.view_component(**args.__dict__)
+
+    def help_clone(self):
+        '''Prints help for `do_clone'.'''
+        print(cleandoc(self.do_clone.__doc__))
+        self.parser_clone.print_help()
+
+    def do_clone(self, line):
+        '''Create and add a duplicate an existing item.'''
+        try:
+            args = self.parser_clone.parse_args(line.split())
+        except SystemExit:
+            pass
+        else:
+            self.mngr.clone_component(**args.__dict__)
+            self.saved = False
 
     def do_shell(self, line):
         '''Execute arbitrary Python code and prints return value. Command `!' 
