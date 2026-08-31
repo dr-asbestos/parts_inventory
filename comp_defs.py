@@ -45,6 +45,8 @@ def get_component(name):
             return JFET
         case 'opto' | 'optocoupler' | 'optoisolator':
             return OptoCoupler
+        case 'darlington' | 'darl' | 'dnpn' | 'dpnp':
+            return Darlington
         case _:
             return None
 
@@ -192,4 +194,8 @@ class OptoCoupler(IC):
     def __init__(self):
         super().__init__()
 
+class Darlington(BJT):
+    __slots__ = ()
+    def __init__(self):
+        super().__init__()
 
